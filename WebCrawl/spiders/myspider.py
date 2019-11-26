@@ -8,8 +8,14 @@ class Hongxiuwangzhan(scrapy.Spider):
     start_urls = ['https://www.nowcoder.com/ta/review-java/review?page=1']
 
     def parse(self, response):
-        question = response.xpath('/html/body/div[1]/div[2]/div[2]/div[1]/div[2]/text()').extract()
-        answer = response.xpath('/html/body/div[1]/div[2]/div[2]/div[2]/div[1]/text()').extract()
+        que = response.xpath('/html/body/div[1]/div[2]/div[2]/div[1]/div[2]/text()').extract()
+        ans = response.xpath('/html/body/div[1]/div[2]/div[2]/div[2]/div[1]/text()').extract()
+        #删除列表中的换行字符\n
+        a = [x.strip() for x in ans if x.strip()!='']
+        q = [x.strip() for x in que if x.strip()!='']
+        #将存储方式由array数组变为字符串
+        answer = "\n".join(a)
+        question = "\n".join(q)
         item = WebcrawlItem()
         item['question'] = question
         item['answer'] = answer
